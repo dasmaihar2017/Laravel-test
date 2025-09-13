@@ -50,11 +50,27 @@ jobs:
         source: "."
         target: "/var/www/laravel"
 
-    - name: SSH into server and check files
+    # - name: SSH into server and check files
+    #   uses: appleboy/ssh-action@master
+    #   with:
+    #     host: ${{ secrets.EC2_HOST }}
+    #     username: ${{ secrets.EC2_USER }}
+    #     key: ${{ secrets.SSH_PRIVATE_KEY }}
+    #     script: |
+    #       composer install --no-dev && php artisan migrate --force && php artisan config:cache
+
+    - name: Deploy Laravel on server
       uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          composer install --no-dev && php artisan migrate --force && php artisan config:cache
+       with:
+       host: ${{ secrets.EC2_HOST }}
+       username: ${{ secrets.EC2_USER }}
+       key: ${{ secrets.SSH_PRIVATE_KEY }}
+       script: |
+      cd /var/www/laravel       # <- Laravel project folder
+      composer install --no-dev --optimize-autoloader
+      php artisan key:generate
+      php artisan migrate --force
+      php artisan config:cache
+      php artisan route:cache
+      sudo systemctl restart apache2
+
