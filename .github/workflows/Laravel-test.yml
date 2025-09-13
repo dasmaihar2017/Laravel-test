@@ -61,16 +61,16 @@ jobs:
 
     - name: Deploy Laravel on server
       uses: appleboy/ssh-action@master
-       with:
+      with:
        host: ${{ secrets.EC2_HOST }}
        username: ${{ secrets.EC2_USER }}
        key: ${{ secrets.SSH_PRIVATE_KEY }}
        script: |
-      cd /var/www/laravel       # <- Laravel project folder
-      composer install --no-dev --optimize-autoloader
-      php artisan key:generate
-      php artisan migrate --force
-      php artisan config:cache
-      php artisan route:cache
-      sudo systemctl restart apache2
+        cd /var/www/laravel      
+        composer install --no-dev --optimize-autoloader
+        php artisan key:generate
+        php artisan migrate --force
+        php artisan config:cache
+        php artisan route:cache
+        sudo systemctl restart apache2
 
