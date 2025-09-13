@@ -57,4 +57,4 @@ jobs:
         username: ${{ secrets.EC2_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          composer install --no-dev && php artisan migrate --force && php artisan config:cache"
+          composer install --no-dev && php artisan migrate --force && php artisan config:cache
